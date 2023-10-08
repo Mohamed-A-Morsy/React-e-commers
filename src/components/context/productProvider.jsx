@@ -1,24 +1,30 @@
+
 import axios from 'axios';
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react';
 
 export const productsContext = createContext();
 
-const productProvider= ({chidlren}) =>{
-  const [product, setProduct] =useState([]);
+const ProductProvider = ({ children }) => {
+  const [product, setProduct] = useState([]);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchProducts = async () => {
       try {
-        let { data } = await axios.get(`https://fakestoreapi.com/products`);
+        let { data } = await axios.get('https://fakestoreapi.com/products');
         console.log(data);
         setProduct(data);
       } catch (error) {
-        console.log(error.massage);
+        console.log(error.message);
       }
     };
-    fetch();
+    fetchProducts();
   }, []);
 
-  return <productProvider.Provider value={{product}}>{chidlren}</productProvider.Provider>
-}
-export default productProvider
+  return (
+    <productsContext.Provider value={{ product }}>
+      {children}
+    </productsContext.Provider>
+  );
+};
+
+export default ProductProvider;
